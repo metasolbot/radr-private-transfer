@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADR Private Transfer</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #0d0d0f;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ff9955, #ff6633);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #666; margin-bottom: 32px; }
+        .card {
+            background: #141418;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card h3 { font-size: 14px; color: #666; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance { font-size: 32px; font-weight: 600; }
+        .balance-label { color: #666; font-size: 14px; }
+        .wallet-address {
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+            color: #888;
+            word-break: break-all;
+            background: #1a1a1f;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; color: #888; font-size: 14px; margin-bottom: 8px; }
+        input, select {
+            width: 100%;
+            padding: 16px;
+            background: #1a1a1f;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+        }
+        input:focus, select:focus { outline: none; border-color: #ff9955; }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9955, #ff6633);
+            color: #fff;
+        }
+        .btn-primary:hover { transform: scale(1.02); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .status {
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .status.success { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .status.error { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .status.info { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .recipients { margin-top: 16px; }
+        .recipient-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #1a1a1f;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .recipient-item .addr { font-family: monospace; color: #888; }
+        .hidden { display: none; }
+        #log {
+            background: #0a0a0c;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        #log div { margin-bottom: 4px; color: #666; }
+        #log div.success { color: #10b981; }
+        #log div.error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 RADR Private Transfer</h1>
+        <p class="subtitle">Privacy-first transfers using ShadowWire</p>
+
+        <div id="wallet-section" class="card">
+            <h3>Wallet</h3>
+            <div id="wallet-status">
+                <button class="btn btn-secondary" onclick="importWallet()">Import Wallet</button>
+            </div>
+        </div>
+
+        <div id="balance-section" class="card hidden">
+            <h3>ShadowWire Balance</h3>
+            <div class="balance"><span id="sw-balance">0.00</span> SOL</div>
+            <div class="balance-label">Shielded • Ready for private transfers</div>
+        </div>
+
+        <div id="transfer-section" class="card hidden">
+            <h3>Private Transfer</h3>
+            <div class="form-group">
+                <label>Transfer Type</label>
+                <select id="transfer-type">
+                    <option value="external">External (to any wallet)</option>
+                    <option value="internal">P2P (to ShadowWire user)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Recipient Address</label>
+                <input type="text" id="recipient" placeholder="Enter Solana address">
+            </div>
+            <div class="form-group">
+                <label>Amount (SOL)</label>
+                <input type="number" id="amount" placeholder="0.1" step="0.01" min="0.1">
+            </div>
+            <button class="btn btn-primary" onclick="sendPrivateTransfer()" id="send-btn">
+                Send Privately
+            </button>
+        </div>
+
+        <div id="batch-section" class="card hidden">
+            <h3>Batch Transfer to cLaw Wallets</h3>
+            <div class="recipients" id="recipients-list"></div>
+            <button class="btn btn-primary" onclick="batchTransfer()" id="batch-btn">
+                Send 0.1 SOL to All (Private)
+            </button>
+        </div>
+
+        <div id="status-box" class="status hidden"></div>
+        <div id="log"></div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tweetnacl@1.0.3/nacl-fast.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs58@5.0.0/dist/index.umd.js"></script>
+    <script src="wallet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
