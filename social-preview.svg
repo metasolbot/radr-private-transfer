@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff9955"/>
+      <stop offset="100%" style="stop-color:#ff6633"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d0f"/>
+      <stop offset="100%" style="stop-color:#1a1a1f"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="200" fill="#ff9955" opacity="0.03"/>
+  <circle cx="1180" cy="540" r="250" fill="#ff6633" opacity="0.03"/>
+  
+  <!-- Shield/Lock icon -->
+  <g transform="translate(200, 170)">
+    <!-- Shield outline -->
+    <path d="M150 0 L280 50 L280 170 C280 240 225 290 150 320 C75 290 20 240 20 170 L20 50 Z" 
+          fill="none" stroke="url(#grad)" stroke-width="8" stroke-linejoin="round"/>
+    
+    <!-- Lock body -->
+    <rect x="95" y="130" width="110" height="90" rx="10" fill="url(#grad)"/>
+    
+    <!-- Lock shackle -->
+    <path d="M115 130 L115 90 C115 60 130 45 150 45 C170 45 185 60 185 90 L185 130" 
+          fill="none" stroke="url(#grad)" stroke-width="14" stroke-linecap="round"/>
+    
+    <!-- Keyhole -->
+    <circle cx="150" cy="165" r="14" fill="#0d0d0f"/>
+    <rect x="144" y="165" width="12" height="28" rx="4" fill="#0d0d0f"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="520" y="280" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="72" font-weight="700" fill="url(#grad)">RADR</text>
+  <text x="520" y="360" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="42" font-weight="500" fill="#ffffff">Private Transfer</text>
+  <text x="520" y="420" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="24" fill="#666666">Privacy-first Solana transfers using ShadowWire</text>
+  
+  <!-- Privacy waves left -->
+  <path d="M60 400 Q20 380 0 420" stroke="#ff9955" stroke-width="3" fill="none" opacity="0.4"/>
+  <path d="M50 440 Q10 420 -10 460" stroke="#ff9955" stroke-width="2" fill="none" opacity="0.3"/>
+  
+  <!-- Privacy waves right -->
+  <path d="M1220 200 Q1260 180 1280 220" stroke="#ff9955" stroke-width="3" fill="none" opacity="0.4"/>
+  <path d="M1230 240 Q1270 220 1290 260" stroke="#ff9955" stroke-width="2" fill="none" opacity="0.3"/>
+  
+  <!-- Solana logo hint -->
+  <text x="520" y="500" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" fill="#444444">Built on Solana • github.com/metasolbot</text>
+</svg>
